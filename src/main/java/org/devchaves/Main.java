@@ -28,9 +28,11 @@ public class Main {
 
         String url = sc1.nextLine();
 
-        ProcessBuilder pb = new ProcessBuilder();
-
-        pb.command("yt-dlp", "-P", "downloads", "x","--audio-format", "mp3", url);
+        ProcessBuilder pb = new ProcessBuilder("/home/jao/bin/yt-dlp",
+                "-P", downloadsDir.toString(),
+                "-x",
+                "--audio-format", "mp3",
+                url);
 
         try {
             Process process = pb.start();
