@@ -33,7 +33,7 @@ public class Main {
                 url
         );
 
-        pb.redirectErrorStream(true); // Combina stdout e stderr
+        pb.redirectErrorStream(true);
 
         try {
             Process process = pb.start();
