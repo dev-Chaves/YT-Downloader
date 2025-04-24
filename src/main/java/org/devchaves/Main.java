@@ -3,10 +3,23 @@ package org.devchaves;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        Path downloadsDir = Paths.get("/home/jao/Projetos/YT-Downloader/downloads");
+
+        if(!Files.exists(downloadsDir)){
+            try {
+                Files.createDirectories(downloadsDir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         //yt-dlp -x --audio-format mp3 <URL>
         System.out.println("Copie a URL aqui: ");
