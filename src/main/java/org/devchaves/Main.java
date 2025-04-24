@@ -13,7 +13,7 @@ public class Main {
 
         Path downloadsDir = Paths.get("/home/jao/Projetos/YT-Downloader/downloads");
 
-        if(!Files.exists(downloadsDir)){
+        if (!Files.exists(downloadsDir)) {
             try {
                 Files.createDirectories(downloadsDir);
             } catch (IOException e) {
@@ -21,35 +21,32 @@ public class Main {
             }
         }
 
-        //yt-dlp -x --audio-format mp3 <URL>
         System.out.println("Copie a URL aqui: ");
-
         Scanner sc1 = new Scanner(System.in);
-
         String url = sc1.nextLine();
 
-        ProcessBuilder pb = new ProcessBuilder("/home/jao/bin/yt-dlp",
+        ProcessBuilder pb = new ProcessBuilder(
+                "/usr/bin/yt-dlp",
                 "-P", downloadsDir.toString(),
                 "-x",
                 "--audio-format", "mp3",
-                url);
+                url
+        );
+
+        pb.redirectErrorStream(true);
 
         try {
             Process process = pb.start();
-
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
-
-            while ((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
 
             int exitCode = process.waitFor();
-
-            System.out.println("Download finalizado! Arquivo salvo em: ./downloads/");
-
-            System.out.println("Processo finalizado!" + exitCode);
+            System.out.println("Download finalizado! Arquivo salvo em: " + downloadsDir);
+            System.out.println("Processo finalizado! Código de saída: " + exitCode);
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
