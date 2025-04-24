@@ -30,7 +30,7 @@ public class Main {
 
         ProcessBuilder pb = new ProcessBuilder();
 
-        pb.command("yt-dlp", "-f", "--audio-format", "mp3", url);
+        pb.command("yt-dlp", "-P", "downloads", "x","--audio-format", "mp3", url);
 
         try {
             Process process = pb.start();
@@ -44,6 +44,9 @@ public class Main {
             }
 
             int exitCode = process.waitFor();
+
+            System.out.println("Download finalizado! Arquivo salvo em: ./downloads/");
+
             System.out.println("Processo finalizado!" + exitCode);
 
         } catch (IOException | InterruptedException e) {
