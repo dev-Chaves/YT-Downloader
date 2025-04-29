@@ -25,7 +25,11 @@ public class Main {
         Scanner sc1 = new Scanner(System.in);
         String url = sc1.nextLine();
 
-        ProcessBuilder pb = new ProcessBuilder(
+        System.out.println("Escolha um formato:");
+        Scanner sc2 = new Scanner(System.in);
+        String format = sc2.nextLine();
+
+        ProcessBuilder mp3 = new ProcessBuilder(
                 "/usr/bin/yt-dlp",
                 "-P", downloadsDir.toString(),
                 "-x",
@@ -33,23 +37,55 @@ public class Main {
                 url
         );
 
-        pb.redirectErrorStream(true);
+        ProcessBuilder mp4 = new ProcessBuilder(
+                "/usr/bin/yt-dlp",
+                "-P", downloadsDir.toString(), // Diretório de destino
+                "-o", "%(title)s.%(ext)s",   // Nome do arquivo de saída (opcional, mantém o título do vídeo)
+                "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]", // Seleciona o melhor vídeo MP4 e áudio
+                url
+        );
 
-        try {
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+        mp3.redirectErrorStream(true);
+
+        if(format.equals("mp3")){
+            try {
+                Process process = mp3.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+
+                int exitCode = process.waitFor();
+                System.out.println("Download finalizado! Arquivo salvo em: " + downloadsDir);
+                System.out.println("Processo finalizado! Código de saída: " + exitCode);
+
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
             }
+        }
 
-            int exitCode = process.waitFor();
-            System.out.println("Download finalizado! Arquivo salvo em: " + downloadsDir);
-            System.out.println("Processo finalizado! Código de saída: " + exitCode);
+        mp4.redirectErrorStream(true);
 
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        if (format.equals("mp4")){
+            try {
+                Process process = mp4.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+
+                int exitCode = process.waitFor();
+                System.out.println("Download finalizado! Arquivo salvo em: " + downloadsDir);
+                System.out.println("Processo finalizado! Código de saída: " + exitCode);
+            }
+            catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
